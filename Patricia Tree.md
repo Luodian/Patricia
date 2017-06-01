@@ -4,7 +4,7 @@
 
 ###从 Trie 到 Patricia
 
-在计算机科学中，Trie 结构是一种常用于检索的数据结构，中文翻译为字典树或者是前缀树，和大多数树形结构不一样的是，它使用边来表示信息，结点表示这个状态（字符串）存在与否以及包含的其余的信息。
+在计算机科学中，Trie结构指的是基于关键空间分解的一种数据结构，中文翻译为字典树或者是前缀树，和大多数树形结构不一样的是，它使用边来表示信息，结点表示这个状态（字符串）存在与否或者是其余的信息。
 
 基于这种存储结构，很显然一个节点的所有子孙都有相同的前缀，也就是这个节点对应的字符串，而根节点对应空字符串。
 
@@ -37,13 +37,13 @@ Trie 树有许多只包含一个孩子的结点，为了提高空间的利用效
 基于以上的特点，该数据结构能够高效的支持如下的操作。
 
 #####1. 插入（Insertion）：
-    
+
 向PAT中插入一个字符串。
 
 时间复杂度： $O(w)$ ，w为字符串长度。
 
 #####2. 查找（Find）
-    
+
 在PAT中检索一个字符串
 
 时间复杂度：$O(w)$，w为字符串长度。
@@ -55,13 +55,13 @@ Trie 树有许多只包含一个孩子的结点，为了提高空间的利用效
 时间复杂度：$O(w)$，w为字符串长度。
 
 #####4. 修改（Update）
-    
+
 通过检索字符串来修改相应的Value
 
 时间复杂度：$O(w)$，w为字符串长度。
 
 #####5. **前缀查询（Prefix search）**
-    
+
 通过关键字前缀查询PAT里所有相关前缀单词。
 
 时间复杂度：$O(w)$，w为含有这个前缀的最长字符串的长度。
@@ -125,11 +125,11 @@ typename std::map<char,patricia_node<K,V> *> ::iterator itr = current_node->chil
 
 - 若插入的字符串 B 和当前已有字符串 A 可以前缀匹配，我们又需要细分几种情况进行讨论。
     1. B 是 A 的前缀，对于如下情形，test 是 tester 的前缀，我们需要在插入 test 的过程中对 tester 进行分裂，并且在 test 这个标签结束的位置设置一个终结标记。
-    <div><center>![pic 5](https://upload.wikimedia.org/wikipedia/commons/5/5e/Insert_%27test%27_into_a_Patricia_trie_when_%27tester%27_exists.png)</center></div>
+      <div><center>![pic 5](https://upload.wikimedia.org/wikipedia/commons/5/5e/Insert_%27test%27_into_a_Patricia_trie_when_%27tester%27_exists.png)</center></div>
     2. A 是 B 的前缀，如下情形，我们插入 slower 这个字符串，此时这个 PAT 中已经存在着 slow 这个串，我们沿着 slow 遍历到终结的地方，给 slow 做一个终结标记，记录下 slow 对应的 value 值，接下来再向外延伸出 er 结点作为分支，并标记上结束标记以及对应的 value 值。
-    <div><center>![pic 6](https://upload.wikimedia.org/wikipedia/commons/8/87/Insert_%27slower%27_with_a_null_node_into_a_Patricia_trie.png)</center></div>
+      <div><center>![pic 6](https://upload.wikimedia.org/wikipedia/commons/8/87/Insert_%27slower%27_with_a_null_node_into_a_Patricia_trie.png)</center></div>
     3. A 和 B 有部分公共的前缀，如下情形，我们试着插入 team ，A 串 test 和 B 串 team 有部分前缀重合 te，因此我们需要比对前缀重合的部分，将原结点 key 值修改为 te 然后切分出子串 am 和 st ，生成子结点 am 和 st，成为原结点的儿子，且将原结点的终结标记修改为 false。
-    <div><center>![pic 7](https://upload.wikimedia.org/wikipedia/commons/0/01/Inserting_the_word_%27team%27_into_a_Patricia_trie_with_a_split.png)</center></div>
+      <div><center>![pic 7](https://upload.wikimedia.org/wikipedia/commons/0/01/Inserting_the_word_%27team%27_into_a_Patricia_trie_with_a_split.png)</center></div>
 
     **pesudo code** 
 
@@ -139,7 +139,7 @@ typename std::map<char,patricia_node<K,V> *> ::iterator itr = current_node->chil
     上面算法中函数 LCP 为寻找两个字符串的最长公共前缀，例如字符串bool和boy的最长公共前缀为bo。
 
 ######2. 查找（Find）
-    
+
 查找的过程通过不断的匹配子串来完成，我们不断的对当前结点递归的进行子串匹配的操作，每次都尝试进行尽可能多的子串匹配，中间过程如果出现不匹配则返回false，否则这个过程就一直执行下去直到匹配到串的终点且终点结点的 terminal 标记为 true。
 <div><center>![pic 8](https://upload.wikimedia.org/wikipedia/commons/6/63/An_example_of_how_to_find_a_string_in_a_Patricia_trie.png)</center></div>
 
@@ -147,7 +147,7 @@ typename std::map<char,patricia_node<K,V> *> ::iterator itr = current_node->chil
 ![pic 10](http://opmza2br0.bkt.clouddn.com/17-5-31/63389931.jpg)
 
 ######3. 删除（Delete）
-    
+
 删除的实现首先需要我们去定位我们需要删除的结点，进行一次与 insert 相同的子串的匹配，但是实际操作的情形比 insert 时简单许多，因为如果子串不能和当前结点完全匹配，我们只需要输出 false。
 
 当子串和当前结点长度相同且完全匹配时，我们删除这个结点，并根据其子结点的关系合并子结点到父节点上。
@@ -224,7 +224,7 @@ std::vector<std::string> prefix_search(const std::string &prefix)
 > 比KMP快到不知道哪里去了。
 
 ##### 前缀查询（Prefix search）
-    
+
 前缀查询广泛的应用于词典软件，搜索引擎当中，这部分的应用与我们的日常生活息息相关。
 <div><center>![pic 14](http://opmza2br0.bkt.clouddn.com/17-5-31/69276475.jpg)</center></div>
 
@@ -243,7 +243,7 @@ Merkle Tree可以看做Hash List的泛化（Hash List可以看作一种特殊的
 <div><center>![pic 13](http://images2015.cnblogs.com/blog/834896/201605/834896-20160527163936819-725283544.png)</center></div>
 
 ##### 路由寻路（Best-Matching Prefix (BMP)）
-    
+
 在网络方面有一个十分棘手的问题叫做IP Routing Lookup Algorithms，就是路由器需要对接收到的包，需要快速的对其IP地址在路由表中查询最长匹配的前缀，以确定一个准确的终点地址。
 
 当同时考虑到并发性和效率的时候，以前采用过的许多方法都显得不那么高效，因为路由可能会在一秒钟之内接到上千个包，而一半路由表中存放的元素大约有30000多项。
@@ -273,7 +273,10 @@ Merkle Tree可以看做Hash List的泛化（Hash List可以看作一种特殊的
 首先，这些 url 要经过 partition 分到 X 台机器中：考虑使用一个 hash 函数 hash (hostname(url)) 将 url 分配到 X 台机器中，这样做的目的：一是数据的分布式存储，二是同一个站点的所有 url 保存到同一台机器中。
 
 其次，每台机器应该如何组织这些数据？一种思路是用数据库的思路去解决，这里提供另外一种思路。考虑将 url 直接放在内存，接将 url 组织成树状结构，显然为了满足快速选出一个站点下所有 url 这个性质，我们就必须得用 Trie 结构了，但是考虑到数据规模是 100 亿，因此我们不得不选择 PAT 结构，相比如传统 Trie 可以节约大量空间。
-    
+
+##### 文档判重
+
+利用Partricia存储字符串节省存储空间和查找时间的优势，对两片疑似相同的文档进行判重处理。针对两篇文档建立两棵Partricia树，value值设置为出现次数，对出现次数大于某一数值的单词，查询它在另一棵树中的value值，如果相差小于某一数值就记录为关键词，最后整理这些关键词，如果这些关键词的数目大于某一数值，就说明文档相似度很高，达到判重效果。（Ps：可用于代码判重，作家枪手调查，论文判重等方面）
 
 ### 还有比它更厉害的改进吗？
 > 答案是，当然有，人类的智慧是无穷无尽的，神一样的前辈们和潮水一样的后继者，请接受我的膝盖。
@@ -281,11 +284,35 @@ Merkle Tree可以看做Hash List的泛化（Hash List可以看作一种特殊的
 - HAT-Trie 是一种利用缓存来提升存取速度的数据结构，
 - Adaptive radix tree 是一种动态管理儿子结点的Trie结构，它可以动态的根据子结点的个数分配内存，每个结点存儿子结点的指针都是动态的，这样做可以更好的节省内存，这种结构既可以用在 Trie 上也可以用在 Patricia 上，在本次的 Patricia tree 中我们实现的就是一个 Adaptive radix tree 结构，我们使用了`std::map<char,patricia_tree<K,V> *>`来管理儿子节点，并且提供 $O(\log_{n})$ 的索引速度。 
 
+
+
 ### Qt应用展示
 
-有请武德浩，浩哥登场为我们展示我们结合 Qt 做出的应用。
+分为数据结构动态展示与对比、文档判重 、前缀查询三个部分。
 
-啪啪啪啪（是👏，不要想太歪）
+##### 动态展示与对比
+
+动态展示Partricia树的建立过程，可进行增删查改四种操作，并与Trie树比较，效果如下
+
+![](http://i1.piimg.com/519918/3e5b980e1eb15da5.png)
+
+
+
+##### 文档判重
+
+用户选择两个文件（不必输入字符串神马的，可以像平常选择文件那样选取），程序在文本框中显示出各自内容，用户点击运行后，输出两篇文档中出现次数相近的单词，并以柱状图呈现，根据处理的结果，给出结论：两篇文档是否相似（Ps：可用于代码判重，作家枪手调查，论文判重等方面）
+
+![](http://i4.buimg.com/519918/752fe03accb66e8b.png)
+
+![](http://i4.buimg.com/519918/032aa6e6539261ad.png)
+
+
+
+##### 前缀查询
+
+用户在搜索栏中输入字符串，搜索栏下方会显示出当前所有单词中所有以该字符串作为前缀的单词。效果如下
+
+![](http://i4.buimg.com/519918/574d0d49777a9d07.png)
 
 ### 写在最后
 ####一、团队协作的一些感受
@@ -301,6 +328,11 @@ Merkle Tree可以看做Hash List的泛化（Hash List可以看作一种特殊的
 
 武德浩：
 
+1. 改动数据结构，适应应用的需要。为了比较性能，我们采用了两种数据结构，包括主体部分`Partricia`树和传统的`Trie`树 ，其中`Partricia`树是现在编写的，而`Trie` 则是李博在这学期开始就写好的（不得不说真的赞！），代码风格和内部结构都有比较大的差异，所以我拿来写应用的时候，花了比较长的时间来研究这两种数据结构接口的不同，以及内部一些由于代码风格的原因而导致的细节差异，将小细节删改，对于一些较大差异则进行了保留，尽量保持对外接口的统一。另外，由于GUI的需要，我需要知道结点的更多信息，原有接口其实是不够的，这就不可避免的要对数据结构进行改动，增加适当函数。可见，使用别人造好的轮子之前，熟悉轮子也是要花一番功夫的。
+2. 实现方式的选择着实花了一番工夫。本着使用成熟轮子的思想，我先想到了第三方库。但软件版本、库 版本、教程不一致，就可能导致编写卡壳，产生 那种“明明就是按教程来的，怎么他们能正常运行的函数我这就提示找不到呢？”的头大感。比如这次我想用`QCustomPlot ` 得到一个简单的柱状图，网上教程大部分是1.0版本，因为软件版本较新，我只能 使用2.0，一些必要的函数进行了删改，官网的说明又比较简略（加上英语已退化成渣。。），研究半天无果最后放弃，觉得Python作数据整理绘图挺方便，就又去联合Python，C++，Qt三个平台编程，结果这是一个更大的坑。最后郁闷了半天，突然想到要不就自己造一个轮子吧，毕竟实用为王，觉得现在只想实现一个功能，画几个矩形和几条线，标上字符不就是柱状图么。最后还真是自己用了基础的操作画出了柱状图。（哭）
+3. GUI编程坐标的确认。在应用和数据结构的呈现部分，我们都使用了GUI来进行描述。工具选用`Qt` 。这款当年由诺基亚出品的应用还是挺强大的，易于入门，不过想做点较大的任务还真不轻松。而且GUI编程无法避免的带来了`像素` 这个磨人的小妖精，除了设计师面板的一些简单框架，每次呈现都得考虑位置的处理（确定到窗口左边和上边的距离）。以画那棵Partricia树为例吧，为了把我们的数据结构搞得更像一棵树，我得找到每个结点到最左边结点的距离和到根节点的距离，进一步还得知道当前结点的父结点，而原来的数据结构中是本来不需要有这些属性的，我就设计相应的函数来进行求解。
+4. Qt编程无法单步调试。窗口部件对信息进行了阻隔和循环。由于我对运行机制理解不是太深，在Partricia进行查找操作时，查找一次，就弹出了7个查找结果框，得增加额外的条件判断来控制数目。另外，当运行出错时，程序直接结束，其实是不太容易确认错在哪里的，（出错时可以使用visual  studio进行调试，但直接跳到错误代码，当该代码是底层实现时（比如STL库中的一个函数），仍不易查看）这些错大部分都是数据结构部分的代码触发了一些边界条件，于是更得加深 对数据结构的理解。
+
 李博：
 
 1. 这次代码部分主要遇见的困难在于网上相关资料极少，我们能够找到的源代码大部分近乎不可读，讲解十分的少，导致我们在前期的时候发育极其缓慢，再加上我决定使用动态管理儿子结点的方法，这是在网上都从来没见过的一种做法，包括像前缀查询部分也是如此，甚至连伪代码都找不到，讲解极少，没有中文分析的博客，这些都是我第一次遇见的把，毕竟这个数据结构真的很生僻。因此我很多时候只能凭着自己的推理，结合着网上能够找到的一些代码，摸着石头过河来完成这个数据结构，但还好在小数据范围的测试中还没有遇到 bug，这是让我非常开心的。
@@ -315,7 +347,7 @@ Merkle Tree可以看做Hash List的泛化（Hash List可以看作一种特殊的
 - [Trie from wiki](https://en.wikipedia.org/wiki/Trie)
 - [Radix tree from wiki](https://en.wikipedia.org/wiki/Radix_tree)
 - [Performance Analysis of IP Routing Lookup Algorithms : Patricia Tree based vs. Hashing based, Packer Ali, Dhamim
-Department of Mathematics & Computer Science, Kent State University April 2000](http://webdiis.unizar.es/asignaturas/TAP/material/ip_report.pdf)
+  Department of Mathematics & Computer Science, Kent State University April 2000](http://webdiis.unizar.es/asignaturas/TAP/material/ip_report.pdf)
 - [Patricia Trie perl module for fast IP address lookups](http://search.cpan.org/~plonka/Net-Patricia-1.014/Patricia.pm)
 - [谈谈以太坊的Merkle树](http://www.8btc.com/merkling-in-ethereum)
 - [Merkle tree from wiki](https://en.wikipedia.org/wiki/Merkle_tree)
