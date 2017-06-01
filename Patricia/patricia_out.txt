@@ -1,3 +1,0 @@
-Patricia insert: 0.031245
-Patricia find: 0.000017
-Patricia delete: 0.000022

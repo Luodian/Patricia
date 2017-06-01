@@ -1,5 +1,0 @@
-Trie insert: 0.015273
-Trie find: 0.000028
-Trie delete: 0.000074
-Patricia space: 508028 bits.
-Trie space: 18601400 bits.
