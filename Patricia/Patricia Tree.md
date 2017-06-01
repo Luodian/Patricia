@@ -196,19 +196,19 @@ std::vector<std::string> prefix_search(const std::string &prefix)
 ##### 插入（Insertion）
 
 首先是插入的对比测试，可以从图中看出的是，Patricia由于存在着比Trie更多的分裂结点的操作， 因此在插入时并不占优，此外由于我们实现的Patricia采取的动态分配内存的方式，而Trie采取的是默认静态空间存储，因此在动态分配内存的过程中也会相对更耗时一点，但也只是常数时间的细微差距。
-![pic](/Users/luodian/Desktop/DSA/Patricia/Patricia/Insert.png)
+![pic](http://i1.piimg.com/519918/ccb4e7553d63d059.png)
 
 ##### 查找与删除（Find and delete）
 
 接下来进行的是查找和删除的测试，在查找过程中，由于相同数据状态下 Patricia 的结构较 Trie 树结点数目少很多，因此查找时明显 Patricia 要更占优势。
 
 在删除的时候，我们首先执行的是上一步的查找操作，因为 Patricia 在查找待删除串的过程会比 Trie 快出不少，而同时又因为 Trie 的结点数目更多，我们删除的过程中调用delete时的次数比 Patricia 要多出许多，因此 Patricia 在删除的过程中也更占优势。
-![pic](/Users/luodian/Desktop/DSA/Patricia/Patricia/Find_delete.png)
+![pic](http://i4.buimg.com/519918/bf49dcf3233791d4.png)
 
 ##### 空间消耗（Space consume）
 
 最后一个图进行的是空间消耗的比较，Trie 结构使用了接近250M的内存，而 Patricia 结构只使用了50M多一些，其中是接近于5倍的空间消耗的差距。
-![pic](/Users/luodian/Desktop/DSA/Patricia/Patricia/Space.png)
+![pic](http://i1.piimg.com/519918/c092a263bce3b041.png)
 
 
 
